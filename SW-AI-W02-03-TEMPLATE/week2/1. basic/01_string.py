@@ -34,6 +34,21 @@ def is_palindrome(s):
     Returns:
         bool: 회문이면 True, 아니면 False
     """
+    # 문자를 소문자로 변경
+    a = s.lower()
+    #replace 메서드는 replace('a','b') a를 b로 변경해달라는 메서드 : 특수문자 제거
+    b = a.replace(',', '').replace(' ', '').replace(':', '').replace('?', '')
+    # 문자열에 숫자 알파벳만 있는지 확인
+    #b = a.isalnum()
+    #b문자열을 뒤집은것
+    c = b[::-1]
+
+    if (b==c):
+        return True
+    else:
+        return False
+        
+
     # TODO: 알파벳과 숫자만 남기고 소문자로 변환하세요
     # 힌트: isalnum() 메서드와 lower() 메서드 사용
     pass

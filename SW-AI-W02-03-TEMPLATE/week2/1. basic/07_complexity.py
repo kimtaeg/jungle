@@ -34,7 +34,14 @@ def find_duplicates_brute_force(nums):
     # TODO: 이중 반복문으로 중복 찾기
     ## i번째 원소와 i+1 이후의 모든 원소를 비교
     ## 같은 원소를 찾으면 duplicates에 추가 (중복 추가 방지 필요)
-    pass
+    for i in range(n):
+        #i자리에 있는 숫자 저장 
+        a = nums[i]
+        for j in range(i+1,n):
+            if (a==nums[j]):
+                if (a not in duplicates):
+                    duplicates.append(a)
+                break
     
     return duplicates
 
@@ -48,14 +55,20 @@ def find_duplicates_sorting(nums):
         return []
     
     # TODO: 배열을 정렬하세요 (nums.sort() 사용)
-    pass
+    nums.sort()
     
     duplicates = []
+    a = len(nums)
     
     # TODO: 인접한 원소를 비교하여 중복 찾기
     # i와 i+1 원소가 같고, duplicates에 없으면 추가
-    pass
-    
+    # a-1를 왜 했냐 숫자 2개를 비교하고 있어 a를 하면 숫자 하나가 부족해 에러남
+    for i in range(a-1):
+        x = nums[i]
+        if (x==nums[i+1]): 
+            if(x not in duplicates): 
+                duplicates.append(x)
+                
     return duplicates
 
 def find_duplicates_hash(nums):
@@ -66,11 +79,19 @@ def find_duplicates_hash(nums):
     """
     seen = set()
     duplicates = set()
-    
+    a = len(nums)
     # TODO: 각 원소를 순회하면서
     ## 이미 seen에 있으면 duplicates에 추가
     ## 없으면 seen에 추가
-    pass
+    # add와 append 차이점은 append는 덧붙이다 add는 순서상관없이 그냥 추가 
+    for i in nums:
+        if (not seen):
+            seen.add(i)
+        else:
+            if (i in seen):
+                duplicates.add(i)
+            else:
+                seen.add(i)
     
     return list(duplicates)
 

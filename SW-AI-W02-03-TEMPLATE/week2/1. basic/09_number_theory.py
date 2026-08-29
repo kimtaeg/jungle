@@ -35,8 +35,12 @@ def gcd(a, b):
         최대공약수
     """
     # TODO: 유클리드 호제법 구현
+    #유클리드 호제법: gcd(a, b) = gcd(b, a % b)
     # base case: b가 0이면 a 반환
     # recursive를 이용 
+    while (b!=0):
+        a,b = b,a%b
+    return a
     pass
 
 def gcd_iterative(a, b):
@@ -51,6 +55,13 @@ def gcd_iterative(a, b):
     """
     # TODO: 반복문으로 구현
     # b가 0이 될 때까지 반복
+    for _ in range():
+        if(b!=0):
+            a,b=b,a%b
+        else:
+            return a
+            
+    
     pass
 
 def lcm(a, b):
@@ -63,7 +74,20 @@ def lcm(a, b):
     Returns:
         최소공배수
     """
-    # TODO: LCM 계산
+    # TODO: LCM 계산  lcm(a, b) = (a × b) / gcd(a, b)
+    # gcd(a, b) = gcd(b, a % b)
+    gcd(a,b)
+    while(b!=0):
+        a,b=b,a%b
+    return a
+
+    a, b = (a*b)/gcd(a,b)
+
+    
+
+    
+
+
     pass
 
 def extended_gcd(a, b):

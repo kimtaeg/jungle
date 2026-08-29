@@ -7,8 +7,8 @@
   예) [1, 2] 와 [2, 1] 은 같은 조합으로 봅니다.
 
 ▣ 입력
-- n: 전체 숫자 개수 (1, 2, ..., n)
-- k: 그 중 골라야 할 개수
+- n: 전체 숫자 개수 (1, 2, ..., n) 4
+- k: 그 중 골라야 할 개수 2
 
 ▣ 출력
 - 가능한 모든 조합을 담은 리스트.
@@ -144,7 +144,9 @@ def combinations(n: int, k: int) -> list:
         # if len(current_combination) == ...:
         #     result.append(...)
         #     return
-        pass  
+        if (len(current_combination) == k):
+          result.append(list(current_combination))
+        
 
         # ──────────────────────────────────────────────────────────────────
         # [Level 2] 가지치기 반복문
@@ -153,6 +155,11 @@ def combinations(n: int, k: int) -> list:
         # - 이번에는 start 부터 n 까지 숫자를 하나씩 시도해 봅니다.
         # - 반복문 변수 이름은 num 으로 추천 (의미: "이번에 고를 숫자").
         #
+        for i in range(start, n+1):
+            num = i
+            current_combination.append(num)
+            backtrack(num+1, current_combination)
+            current_combination.pop()
         # TODO(Level 2): 아래 한 줄을 작성하세요.
         pass
 

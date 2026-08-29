@@ -36,18 +36,28 @@ def find_max_divide_conquer(arr, left, right):
         최댓값
     """
     # TODO: base case - 원소가 하나면 그 값 반환
+    if(left==right):
+        return arr[left]
     pass
     
     # TODO: 중간 지점 계산
+    mid = (left + right)//2
     pass
     
     # TODO: 왼쪽 절반의 최댓값
-    pass
+    left_max = find_max_divide_conquer(arr, left, mid)
+    
         
     # TODO: 오른쪽 절반의 최댓값
-    pass
+    #인덱스는 0부터 시작 맨날 까먹지말고 +1해라 끝부분은 +1를 해야 마지막까지 볼 수 있다
+    right_max = find_max_divide_conquer(arr, mid+1, right)
+    
     
     # TODO: 둘 중 큰 값 반환
+    if(left_max>right_max):
+        return left_max
+    else:
+        return right_max
     pass
 
 # 테스트 케이스
