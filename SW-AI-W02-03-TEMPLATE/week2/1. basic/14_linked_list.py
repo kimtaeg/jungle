@@ -100,8 +100,8 @@ class Node:
         └──────┴──────┘
     """
     def __init__(self, data):
-        self.data = data
-        self.next = None
+        self.data = data # 이 칸에 담긴 값
+        self.next = None # 다음 칸을 가리키는
 
 
 class LinkedList:
@@ -111,7 +111,7 @@ class LinkedList:
         head ──▶ [data|next] ──▶ [data|next] ──▶ ... ──▶ [data|None]
     """
     def __init__(self):
-        self.head = None
+        self.head = None # 첫번째 칸 
 
     def append(self, data):
         """
@@ -142,7 +142,7 @@ class LinkedList:
         # ─── Level 2: 마지막 노드 찾기 ──────────────────────────────
         # head 부터 시작해서 next 가 None 이 될 때까지 따라갑니다.
         # 즉 "current.next 가 있는 동안" 계속 이동.
-        current = self.head
+        current = self.head # current는 변수는 지금 내가 어느 칸을 보고 있는지 나타내는 변수 
         # TODO: while 문으로 current 를 마지막 노드까지 이동시키세요.
         #   while current.next is not None:
         #       current = current.next
