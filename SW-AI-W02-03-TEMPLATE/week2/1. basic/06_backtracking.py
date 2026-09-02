@@ -146,6 +146,8 @@ def combinations(n: int, k: int) -> list:
         #     return
         if (len(current_combination) == k):
           result.append(list(current_combination))
+          return 
+        #리턴을 쓰는 이유는 불필요한 재귀가 계속 돎
         
 
         # ──────────────────────────────────────────────────────────────────

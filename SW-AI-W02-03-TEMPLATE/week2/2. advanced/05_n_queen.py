@@ -68,7 +68,31 @@ def n_queens(n: int) -> int:
     #       ...
     #   place(0)
     #   return count
-    pass
+    # nxn 행렬 만들기
+    cols = [0] * n
+
+    def place(row):
+        # row가 n에 도달했다면 조건을 완벽히 만족하는 하나의 배치를 찾아 재귀 종료 
+        if row == n:
+            return 1
+        total = 0
+        for c in range(n):
+            # 다른 퀸에게 공격받는지 않받는지 참 거짓 
+            valid = True
+            for i in range(row):
+                # 이전 퀸의 열 번호와 현재 놓으려고 하는 열 번호의 거리 계산 
+                diff = cols[i] - c
+                # 양수일 때 퀸이 왼쪽, 음수일 때 퀸이 오른쪽 
+                if diff == 0 or diff == row - i or diff == -(row - i):
+                    valid = False
+                    break
+            if valid:
+                cols[row] = c
+                total += place(row + 1)
+        return total
+
+    return place(0)
+    
 
 
 if __name__ == "__main__":
