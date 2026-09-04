@@ -13,16 +13,6 @@
 출력:
 - 각 정점에 연결된 정점들
 
-예제:
-정점: 4개 (0, 1, 2, 3)
-간선: [(0,1), (0,2), (1,2), (2,3)]
-
-무방향 그래프:
-0 → [1, 2]
-1 → [0, 2]
-2 → [0, 1, 3]
-3 → [2]
-
 힌트:
 - 딕셔너리 사용: {정점: [연결된 정점들]}
 - 무방향 그래프는 양방향 추가
@@ -41,13 +31,21 @@ def create_graph(vertices, edges, directed=False):
         그래프 딕셔너리
     """
     # TODO: 빈 그래프 초기화
-    pass
+    graph = {}
     
     # TODO: 간선 추가
     ## 간선 추가 (u에서 v로)
     ## 무방향 그래프면 반대 방향도 추가
-    pass
-    
+    ## directed가 false이면 양쪽 true이면 한쪽
+    for i in range(0, vertices):
+        graph[i] = []
+
+    for u,v in edges:
+        graph[u].append(v)
+        # 무방향 그래프인지 확인 
+        if (directed != True):
+            graph[v].append(u)
+
     return graph
 
 # 테스트 케이스
