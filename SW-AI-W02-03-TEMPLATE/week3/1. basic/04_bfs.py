@@ -57,9 +57,9 @@ def bfs(graph, start):
     ## 인접한 정점들 확인
     ## 방문하지 않은 정점이면 큐에 추가
     while queue:
-        clear=queue.popleft()
+        v=queue.popleft()
 
-        for i in graph[clear]:
+        for i in graph[v]:
             if i not in visited:
                 queue.append(i)
                 visited.append(i)
