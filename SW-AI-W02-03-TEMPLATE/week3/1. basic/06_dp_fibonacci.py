@@ -90,15 +90,14 @@ def fibonacci_memo(n, memo=None):
         return 0
     if(n == 1):
         return 1
-    
     # TODO: 이미 계산한 값이 memo에 있으면 반환
-    
-    # If 문에 memo의 value값이 있으면 반환해야함
-    pass
+    if (n in memo):
+        return memo[n]
     
     # TODO: 재귀 호출하여 계산하고 memo에 저장
-    pass
-    
+    a = fibonacci_memo(n-2,memo) + fibonacci_memo(n-1,memo)
+    memo[n] = a
+        
     return memo[n]
 
 # 테스트 케이스
