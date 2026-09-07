@@ -95,9 +95,8 @@ def fibonacci_memo(n, memo=None):
         return memo[n]
     
     # TODO: 재귀 호출하여 계산하고 memo에 저장
-    a = fibonacci_memo(n-2,memo) + fibonacci_memo(n-1,memo)
-    memo[n] = a
-        
+    memo[n] = fibonacci_memo(n-2,memo) + fibonacci_memo(n-1,memo)
+    
     return memo[n]
 
 # 테스트 케이스
