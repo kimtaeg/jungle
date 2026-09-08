@@ -76,10 +76,29 @@ def dijkstra(n: int, edges: list, start: int) -> list:
     반환: 길이 n 의 거리 리스트 (도달 불가 = float('inf'))
     """
     # TODO: 인접 리스트 graph 구성 (graph[u] = [(v, w), ...])
+    # 인접리스트
+    x = [[] for _ in range(n)]
+
+    for u,v,w in edges:
+        x[u].append((v,w))
     # TODO: dist 를 INF 로 초기화하고 dist[start] = 0
+    dist = [INF] * n
+    dist[start]= 0
+    q = [(0, start)]
     # TODO: 우선순위 큐(heapq)로 BFS-like 최단경로 탐색
+    while (q):
+        cur_dist, cur_node = heapq.heappop(q)
+        if (cur_dist>dist[cur_node]):
+            continue
+
+        for v,w in x[cur_node]:
+            nd = cur_dist + w
+
+            if (nd<dist[v]):
+                dist[v] = nd
+                heapq.heappush(q,(nd,v))
     # TODO: dist 반환
-    pass
+    return dist
 
 
 def _format(dist):
