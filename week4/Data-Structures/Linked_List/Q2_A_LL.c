@@ -13,14 +13,14 @@ Purpose: Implementing the required functions for Question 2 */
 
 typedef struct _listnode
 {
-	int item;
-	struct _listnode *next;
+	int item; // 노드에 담긴 정수 값 
+	struct _listnode *next; //노드에 다음 값
 } ListNode;			// You should not change the definition of ListNode
 
 typedef struct _linkedlist
 {
-	int size;
-	ListNode *head;
+	int size; // 노드 크기 
+	ListNode *head; // 노드 첫번째 값
 } LinkedList;			// You should not change the definition of LinkedList
 
 
@@ -103,7 +103,7 @@ int main()
 
 void alternateMergeLinkedList(LinkedList *ll1, LinkedList *ll2)
 {
-    /* add your code here */
+	
 }
 
 ///////////////////////////////////////////////////////////////////////////////////

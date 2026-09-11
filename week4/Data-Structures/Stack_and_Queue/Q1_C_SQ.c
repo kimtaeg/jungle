@@ -13,14 +13,14 @@ Purpose: Implementing the required functions for Question 1 */
 
 typedef struct _listnode
 {
-	int item;
-	struct _listnode *next;
+	int item; // 값
+	struct _listnode *next; // 다음 노드 포인터 
 } ListNode;	// You should not change the definition of ListNode
 
 typedef struct _linkedlist
 {
-	int size;
-	ListNode *head;
+	int size; // 크기 
+	ListNode *head; // 첫 노드 
 } LinkedList;	// You should not change the definition of LinkedList
 
 
@@ -50,9 +50,9 @@ void removeAllItems(LinkedList *ll);
 
 int main()
 {
-	int c, i;
-	LinkedList ll;
-	Queue q;
+	int c, i; // 연결리스트에 정수 삽입
+	LinkedList ll; // createQueueFromLinkedList 호출 -> 리스트를 큐로 변환
+	Queue q; // removeOddValues 호출 -> 큐에서 홀수 제거 
 
 	c = 1;
 
@@ -125,11 +125,11 @@ void removeOddValues(Queue *q)
 }
 
 //////////////////////////////////////////////////////////////////////////////////
-
+// 큐 뒤에 삽입 
 void enqueue(Queue *q, int item) {
 	insertNode(&(q->ll), q->ll.size, item);
 }
-
+// 큐 앞에서 꺼내면서 제거, 반환값이 그 값
 int dequeue(Queue *q) {
 	int item;
 
@@ -140,7 +140,7 @@ int dequeue(Queue *q) {
 	}
 	return -1;
 }
-
+// 비었는지 확인 
 int isEmptyQueue(Queue *q) {
 	if ((q->ll).size == 0)
 		return 1;

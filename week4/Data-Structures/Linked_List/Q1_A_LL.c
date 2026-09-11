@@ -12,13 +12,13 @@ Purpose: Implementing the required functions for Question 1 */
 //////////////////////////////////////////////////////////////////////////////////
 
 typedef struct _listnode{
-	int item;
-	struct _listnode *next;
+	int item; // 노드에 담긴 정수 값 
+	struct _listnode *next; //노드에 다음 값
 } ListNode;			// You should not change the definition of ListNode
 
 typedef struct _linkedlist{
-	int size;
-	ListNode *head;
+	int size; // 노드 크기 
+	ListNode *head; // 노드 첫번째 값
 } LinkedList;			// You should not change the definition of LinkedList
 
 
@@ -90,7 +90,50 @@ int main()
 
 int insertSortedLL(LinkedList *ll, int item)
 {
-	/* add your code here */
+	ListNode *newNode; // 새로 만들 노드를 가리킬 포인터 
+	ListNode *cur; // 리스트 돌아다니며 현재 노드를 가리킬 포인터
+	int index = 0; // 현재 위치를 저장하는 변수 
+
+	// ll이 null이면 리스트 자체가 없다는 것 그래서 -1 반환 
+	if(ll == NULL){
+		return -1;
+	}	
+
+	// listnode를 저장할 메모리 만듬 
+	newNode = malloc(sizeof(ListNode));
+
+	// 메모리 할당에 실패면 null 
+	if(newNode == NULL){
+		return -1;
+	}
+
+	// 새 노드에 값을 저장
+	newNode->item = item;
+	newNode->next = NULL;
+
+	// 첫번째 삽입
+	if(ll->head == NULL || item < ll->head->item){
+		newNode->next = ll->head;
+		ll->head = newNode;
+		ll->size++;
+
+		return 0;
+	}
+	// item보다 작은 값들이 끝날 때까지 이동
+	cur = ll->head;
+
+	// 새 값이 들어갈 위치를 찾는 반복문
+	while (cur->next != NULL && cur->next->item < item){
+		cur = cur->next;
+		index++;
+	}
+
+	// cur 뒤에 새 노드 삽입
+	newNode->next = cur->next;
+	cur->next = newNode;
+	ll->size++;
+
+	return index +1;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
