@@ -103,7 +103,30 @@ int main()
 
 void alternateMergeLinkedList(LinkedList *ll1, LinkedList *ll2)
 {
+	int count = (ll1->size < ll2->size) ? ll1->size : ll2->size; 
+
+	// 노드를 번갈아가며 인덱스에 넣는것 
+	for(int i = 0; i<count; i++){
+		int value = findNode(ll2, 0)->item; 
+		insertNode(ll1, 2*i+1, value);
+		removeNode(ll2,0);
+	}
 	
+	// ListNode *a = ll1->head;
+	// ListNode *b = ll2->head;
+	// 현재 노드의 다음 노드 주소를 임시 저장 
+	// ListNode *tmp1, *tmp2;
+	// while(a!=NULL && b!=NULL){
+	// 	ll1->size++;
+	// 	ll2->size--;
+
+	// 	tmp1 = a->next;
+	// 	tmp2 = b->next;
+
+	// 	a->next=b;
+	// 	b->next=tmp1;
+	// }
+	// ll2->head=b;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
