@@ -86,7 +86,45 @@ int main()
 
 void moveOddItemsToBack(LinkedList *ll)
 {
-	
+	// int list = ll -> size;
+	// int index = 0;
+
+	// for(int cnt=0; cnt < list; cnt++){
+	// 	ListNode *node = findNode(ll, index);
+	// 	if (node->item % 2 != 0){
+	// 		int value = node->item;
+	// 		removeNode(ll,index);
+	// 		insertNode(ll, ll->size, value);
+	// 	} else{
+	// 		index++;
+	// 	}
+	// }
+	// 노드 손잡이 선언
+	ListNode *evenHead = NULL, *evenTail = NULL;
+	ListNode *oddHead = NULL, *oddTail = NULL;
+	ListNode *cur = ll->head; // 연결되어 있던 리스트를 하나씩 훑고 지나가는 탐색용 움직이는 손잡이
+
+	while (cur!=NULL)
+	{
+		ListNode *next = cur->next; // 다음 노드 미리 저장
+		cur->next = NULL; // 떼어날 때 안전하게 끊어줌
+		
+		if (cur->item % 2 == 0){
+			if (evenHead==NULL) evenHead = evenTail = cur;
+			else{ evenTail->next = cur; evenTail = cur; }
+		} else {
+			if (oddHead == NULL) oddHead = oddTail =cur;
+			else{ oddTail->next = cur; oddTail = cur; }
+		}
+		cur = next;
+	}
+	// 두 체인 합치기
+	if (evenHead == NULL){
+		ll->head = oddHead;
+	} else {
+		evenTail->next = oddHead;
+		ll->head = evenHead;
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////////

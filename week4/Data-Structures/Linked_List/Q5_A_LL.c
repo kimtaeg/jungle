@@ -102,7 +102,47 @@ int main()
 
 void frontBackSplitLinkedList(LinkedList *ll, LinkedList *resultFrontList, LinkedList *resultBackList)
 {
-	/* add your code here */
+	int cnt = ll->size;
+	int half = (cnt%2==0 ? cnt/2 : (cnt/2)+1);
+	ListNode *cur = ll->head;
+
+	// for(int i = 0; i < cnt; i++){
+	// 	if(i<half){
+	// 		insertNode(resultFrontList, resultFrontList->size, cur->item);
+	// 	} else{
+	// 		insertNode(resultBackList, resultBackList->size, cur->item);
+	// 	}
+	// 	cur = cur ->next;
+	// }
+
+	ListNode *frontTail = NULL, *backTail = NULL;
+
+	for(int i = 0; i<cnt; i++){
+		ListNode *newNode = malloc(sizeof(ListNode));
+		newNode->item = cur->item;
+		newNode->next = NULL;
+
+		if(i<half){
+			if(resultFrontList->head==NULL){
+				resultFrontList->head = newNode;
+			} else {
+				frontTail -> next = newNode;
+			}
+			// 다음 번 반복 
+			frontTail = newNode;
+			resultFrontList -> size++;
+		} else {
+			if(resultBackList->head==NULL){
+				resultBackList->head = newNode;
+			} else{
+				backTail -> next = newNode;
+			}
+			backTail = newNode;
+			resultBackList -> size++;
+		}
+		cur = cur->next;
+	}
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
