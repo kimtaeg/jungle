@@ -116,14 +116,42 @@ int main()
 
 void createQueueFromLinkedList(LinkedList *ll, Queue *q)
 {
-	/* add your code here */
+	/*ListNode *cur = ll->head;
+
+	while(cur!=NULL){
+		enqueue(q,cur->item);
+		cur = cur->next;
+	}*/
+
+	ListNode *cur = ll->head;
+	ListNode *tail = NULL; // 큐의 마지막 노드를 가리킴
+	ListNode *newNode;
+
+	while(cur!=NULL){
+		newNode = malloc(sizeof(ListNode));
+		newNode->item = cur->item;
+		newNode->next = NULL;
+
+		// 큐가 현재 비어있는지 
+		if(q->ll.head == NULL){
+			q->ll.head = newNode;
+		}
+		else{
+			tail->next = newNode;
+		}
+		tail = newNode;
+		q->ll.size++;
+
+		cur = cur->next;
+	}
+
+	
 }
 
 void removeOddValues(Queue *q)
 {
-	/* add your code here */
+	
 }
-
 //////////////////////////////////////////////////////////////////////////////////
 // 큐 뒤에 삽입 
 void enqueue(Queue *q, int item) {

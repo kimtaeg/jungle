@@ -88,6 +88,8 @@ int main()
 
 int moveMaxToFront(ListNode **ptrHead)
 {
+	// 예외 상황 리스트가 비어있는 경우, 노드가 1개뿐인 경우 
+	// 이게 없으면 프로그램이 따운
 	if (*ptrHead == NULL || (*ptrHead)->next == NULL)
         return 0;
 

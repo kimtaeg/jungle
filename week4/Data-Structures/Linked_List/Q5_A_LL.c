@@ -114,7 +114,6 @@ void frontBackSplitLinkedList(LinkedList *ll, LinkedList *resultFrontList, Linke
 	// 	}
 	// 	cur = cur ->next;
 	// }
-
 	ListNode *frontTail = NULL, *backTail = NULL;
 
 	for(int i = 0; i<cnt; i++){
