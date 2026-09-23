@@ -88,7 +88,6 @@ int main(void) {
         checksum += (unsigned char)v.lines[i][0];
 
     printf("lines = %d, checksum = %ld\n", v.count, checksum);
-
-    free(v.lines);
+    free(v.lines);  // 힙 메모리는 다 쓴 뒤 반드시 해제
     return 0;
 }
