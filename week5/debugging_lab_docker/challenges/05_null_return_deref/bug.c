@@ -64,7 +64,11 @@ static void expand(const Config *c, const char *tmpl, char *out, size_t outcap) 
             memcpy(key, p + 2, kl);
             key[kl] = '\0';
 
-            const char *v = cfg_get(c, key);      
+            const char *v = cfg_get(c, key);   
+            if(!v){
+                // v가 null(0x0)이 뜨면 크래시가 나니 v가 없다면 그냥 빈 문자열을 들어가게 해줌
+                v = ""; 
+            }    
             size_t vl = strlen(v);                 
             if (o + vl < outcap) { memcpy(out + o, v, vl); o += vl; }
             p = end + 1;
