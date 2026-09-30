@@ -41,11 +41,11 @@
 
 #define MAX_UNDO 8
 typedef struct {
-    int   *data;
-    size_t len, cap;
-    int   *clipboard;       
-    int   *undo[MAX_UNDO];   
-    int    undo_n;
+    int   *data; // 실제 데이터가 있는 곳
+    size_t len, cap; // 현재 데이터 개수, 확보된 공간 크기
+    int   *clipboard;  // 복사한 데이터가 있는 곳
+    int   *undo[MAX_UNDO]; // 이전 상태들의 주소들
+    int    undo_n; // undo 개수 
 } EditBuffer;
 
 static void eb_init(EditBuffer *e) {
@@ -61,7 +61,12 @@ static void eb_init(EditBuffer *e) {
 }
 
 static void eb_snapshot(EditBuffer *e) {
-    if (e->undo_n < MAX_UNDO) e->undo[e->undo_n++] = e->data;
+    if (e->undo_n < MAX_UNDO){
+        int *copy = malloc(e->len * sizeof(int));
+        if(!copy){ perror("malloc"); exit(1); }
+        memcpy(copy, e->data, e->len * sizeof(int));
+        e->undo[e->undo_n++] = copy;
+    } 
 }
 
 static void eb_grow(EditBuffer *e, size_t need) {
