@@ -75,6 +75,12 @@ static int **make_matrix(void) {
 
     int **rows = malloc(ROWS * sizeof(int *));
     if (!rows) { perror("malloc"); exit(1); }
+    // 일단 rows들을 null로 채워주는 방법도 있고 
+    // 만약 null처리 안하면 코드에 쓰레기 값을 구분할 방법이 없어 아무 주소나 역참조하다가 버그가 나는 것
+    // calloc을 사용해서 하는 방법도 있음
+    for(int i = 0; i<ROWS;i++){
+        rows[i] = NULL;
+    }
 
     for (int i = 0; i < ROWS; i += 2) {
         int *r = malloc(COLS * sizeof(int));
@@ -87,6 +93,9 @@ static int **make_matrix(void) {
 static long row_sum(int **rows, int nrows) {
     long total = 0;
     for (int i = 0; i < nrows; i++) {
+        if (rows[i] == NULL){
+            continue;
+        }
         for (int j = 0; j < COLS; j++) {
             total += rows[i][j];      
         }
