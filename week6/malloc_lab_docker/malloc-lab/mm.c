@@ -67,11 +67,33 @@ static void *extend_heap(size_t words);
 static void *coalesce(void *bp);
 static void *find_fit(size_t asize);
 static void place(void *bp, size_t asize);
+static char *last_bp;
 
-static void *find_fit(size_t asize){
+// best fit과 first fit 차이가 뭘까
+static void *find_fit(size_t asize)
+{
     void *bp;
-    for(bp = heap_listp; GET_SIZE(HDRP(bp)) > 0; bp = NEXT_BLKP(bp)){
-        if(!GET_ALLOC(HDRP(bp)) && (asize <= GET_SIZE(HDRP(bp)))){
+
+    for(bp = last_bp;
+        GET_SIZE(HDRP(bp)) > 0;
+        bp = NEXT_BLKP(bp)) {
+
+        if(!GET_ALLOC(HDRP(bp)) &&
+           (asize <= GET_SIZE(HDRP(bp)))) {
+
+            last_bp = bp;
+            return bp;
+        }
+    }
+
+    for(bp = heap_listp;
+        bp != last_bp;
+        bp = NEXT_BLKP(bp)) {
+
+        if(!GET_ALLOC(HDRP(bp)) &&
+           (asize <= GET_SIZE(HDRP(bp)))) {
+
+            last_bp = bp;
             return bp;
         }
     }
@@ -107,6 +129,7 @@ int mm_init(void)
     PUT(heap_listp + (2*WSIZE), PACK(DSIZE, 1));
     PUT(heap_listp + (3*WSIZE), PACK(0, 1));
     heap_listp += (2*WSIZE);
+    last_bp = heap_listp;
 
     if(extend_heap(CHUNKSIZE/WSIZE) == NULL){
         return -1;
@@ -231,6 +254,11 @@ static void *coalesce(void *bp){
         PUT(FTRP(bp), PACK(size, 0));
     }
 
+    // last_bp가 합쳐진 블록 안쪽을 가리키면 블록 시작으로 당기기
+    if((char *)last_bp > (char *)bp && (char *)last_bp < NEXT_BLKP(bp)){
+        last_bp = bp;
+    }
+
     return bp;
 }
 /*
@@ -249,7 +277,7 @@ void *mm_realloc(void *ptr, size_t size)
     if(size <= DSIZE){
         asize = 2 * DSIZE;
     }else{
-        asize = DSIZE * ((size + (DSIZE - 1)) / DSIZE);
+        asize = DSIZE * ((size + DSIZE + (DSIZE - 1)) / DSIZE);
     }
     
     // 현재 블록 크기 -> cur
@@ -265,9 +293,14 @@ void *mm_realloc(void *ptr, size_t size)
         // 현재 블록 + 다음블록 합치기
         cur += GET_SIZE(HDRP(NEXT_BLKP(ptr)));
         // 헤더 갱신
-        PUT(HDRP(ptr), PACK(cur, 0));
+        PUT(HDRP(ptr), PACK(cur, 1));
         // 풋터 갱신
-        PUT((char *)ptr + cur - DSIZE, PACK(cur, 0));
+        PUT((char *)ptr + cur - DSIZE, PACK(cur, 1));
+
+        // last_bp가 흡수된 블록을 가리키면 ptr로 당기기
+        if((char *)last_bp > (char *)ptr && (char *)last_bp < NEXT_BLKP(ptr)){
+            last_bp = ptr;
+        }
 
         return ptr;
     }
