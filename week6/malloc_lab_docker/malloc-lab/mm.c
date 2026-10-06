@@ -39,6 +39,7 @@ team_t team = {
 #define ALIGNMENT 8
 #define WSIZE 4
 #define DSIZE 8
+// 1<<12 -> 비트 시프트 연산 
 #define CHUNKSIZE (1<<12)
 
 #define MAX(x, y) ((x) > (y)? (x) : (y))
@@ -186,31 +187,50 @@ static void *coalesce(void *bp){
     size_t next_alloc = GET_ALLOC(HDRP(NEXT_BLKP(bp)));
     size_t size = GET_SIZE(HDRP(bp));
 
-    if (prev_alloc && next_alloc){
-        // case 1
-        return bp;
-    }
+    // if (prev_alloc && next_alloc){
+    //     // case 1
+    //     return bp;
+    // }
 
-    else if (prev_alloc && !next_alloc){
-        // case 2
-        size += GET_SIZE(HDRP(NEXT_BLKP(bp)));
-    }
+    // else if (prev_alloc && !next_alloc){
+    //     // case 2
+    //     size += GET_SIZE(HDRP(NEXT_BLKP(bp)));
+    // }
 
-    else if (!prev_alloc && next_alloc){
-        // case 3
+    // else if (!prev_alloc && next_alloc){
+    //     // case 3
+    //     size += GET_SIZE(HDRP(PREV_BLKP(bp)));
+    //     PUT(FTRP(bp), PACK(size, 0));
+    //     PUT(HDRP(PREV_BLKP(bp)), PACK(size, 0));
+    //     bp = PREV_BLKP(bp);
+    // }
+
+    // else{
+    //     // case 4
+    //     size += GET_SIZE(HDRP(PREV_BLKP(bp)))+GET_SIZE(FTRP(NEXT_BLKP(bp)));
+    //     PUT(HDRP(PREV_BLKP(bp)), PACK(size, 0));
+    //     PUT(FTRP(NEXT_BLKP(bp)), PACK(size, 0));
+    //     bp = PREV_BLKP(bp);
+    // }
+
+    if(!prev_alloc){
+        // 이전 블록 합치기
         size += GET_SIZE(HDRP(PREV_BLKP(bp)));
-        PUT(FTRP(bp), PACK(size, 0));
+
         PUT(HDRP(PREV_BLKP(bp)), PACK(size, 0));
+        PUT(FTRP(bp), PACK(size, 0));
+
         bp = PREV_BLKP(bp);
     }
 
-    else{
-        // case 4
-        size += GET_SIZE(HDRP(PREV_BLKP(bp)))+GET_SIZE(FTRP(NEXT_BLKP(bp)));
-        PUT(HDRP(PREV_BLKP(bp)), PACK(size, 0));
-        PUT(FTRP(NEXT_BLKP(bp)), PACK(size, 0));
-        bp = PREV_BLKP(bp);
+    if(!next_alloc){
+        // 다음 블록 합치기
+        size += GET_SIZE(HDRP(NEXT_BLKP(bp)));
+
+        PUT(HDRP(bp), PACK(size, 0));          
+        PUT(FTRP(bp), PACK(size, 0));
     }
+
     return bp;
 }
 /*
@@ -218,17 +238,58 @@ static void *coalesce(void *bp){
  */
 void *mm_realloc(void *ptr, size_t size)
 {
+    // 무조건 새로 realloc하지 않고 이미 바로 옆에 있는 빈 공간을 활용해서 제자리에서 확장
     void *oldptr = ptr;
     void *newptr;
     size_t copySize;
     
+    // size -> asize
+    size_t asize;
+
+    if(size <= DSIZE){
+        asize = 2 * DSIZE;
+    }else{
+        asize = DSIZE * ((size + (DSIZE - 1)) / DSIZE);
+    }
+    
+    // 현재 블록 크기 -> cur
+    size_t cur = GET_SIZE(HDRP(ptr));
+    // 현재 블록으로 충분하면
+    if(cur >= asize){
+        return ptr;
+    }
+
+    // 다음 블록이 free이고 현재 + 다음 블록으로 충분하면 
+    if(GET_ALLOC(FTRP(NEXT_BLKP(ptr))) == 0 && 
+        cur + GET_SIZE(HDRP(NEXT_BLKP(ptr))) >= asize){
+        // 현재 블록 + 다음블록 합치기
+        cur += GET_SIZE(HDRP(NEXT_BLKP(ptr)));
+        // 헤더 갱신
+        PUT(HDRP(ptr), PACK(cur, 0));
+        // 풋터 갱신
+        PUT((char *)ptr + cur - DSIZE, PACK(cur, 0));
+
+        return ptr;
+    }
+
     newptr = mm_malloc(size);
-    if (newptr == NULL)
-      return NULL;
-    copySize = *(size_t *)((char *)oldptr - SIZE_T_SIZE);
-    if (size <= copySize)
-      copySize = size;
+
+    if(newptr == NULL){
+        return NULL;
+    }
+    // 기존 payload 크기
+    copySize = GET_SIZE(HDRP(oldptr)) - DSIZE;
+
+    // 새로 요청한 크기보다 기존 payload가 크면 size만 복사
+    if (size < copySize) {
+        copySize = size;
+    }
+
+    // 기존 데이터 복사
     memcpy(newptr, oldptr, copySize);
+
+    // 기존 블록 해제
     mm_free(oldptr);
+
     return newptr;
 }
